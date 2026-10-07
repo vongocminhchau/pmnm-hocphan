@@ -904,6 +904,80 @@ def manage_score(mssv, course):
 
 
 # ============================================================
+# PHẦN 3 - CÂU 9
+# XỬ LÝ LỖI CHUNG
+# ============================================================
+
+@app.errorhandler(400)
+@app.errorhandler(404)
+@app.errorhandler(405)
+def handle_error(error):
+
+    status_code = error.code
+
+    titles = {
+        400: "Dữ liệu không hợp lệ",
+        404: "Không tìm thấy",
+        405: "Phương thức không được hỗ trợ"
+    }
+
+    title = titles.get(
+        status_code,
+        "Lỗi"
+    )
+
+    detail = error.description
+
+    # API -> JSON
+    if request.path.startswith("/api/"):
+
+        data = {
+            "error": title,
+            "detail": detail
+        }
+
+        response = make_response(
+            json.dumps(
+                data,
+                ensure_ascii=False
+            ),
+            status_code
+        )
+
+        response.headers["Content-Type"] = (
+            "application/json; charset=utf-8"
+        )
+
+        return response
+
+    # Website -> HTML
+
+    body = f"""
+        <h1>Lỗi {status_code}</h1>
+
+        <h2>{escape(title)}</h2>
+
+        <p>{escape(str(detail))}</p>
+
+        <p>
+            <a href="{url_for('home')}">
+                Về trang chủ
+            </a>
+        </p>
+    """
+
+    response = make_response(
+        layout(
+            f"Lỗi {status_code}",
+            body
+        ),
+        status_code
+    )
+
+    return response
+
+
+# ============================================================
 # CHẠY ỨNG DỤNG
 # ============================================================
 
