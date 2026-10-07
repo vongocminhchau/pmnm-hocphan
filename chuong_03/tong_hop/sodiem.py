@@ -645,6 +645,102 @@ def search():
     return layout("Tìm kiếm", body)
 
 
+# ============================================================
+# PHẦN 2 - CÂU 7
+# API ĐỌC DỮ LIỆU
+# ============================================================
+
+@app.route("/api/students")
+def api_students():
+
+    lop_filter = request.args.get("lop")
+
+    min_avg_raw = request.args.get("min_avg")
+
+    min_avg = None
+
+    # Phân biệt:
+    # - không truyền min_avg
+    # - truyền min_avg nhưng sai kiểu
+
+    if min_avg_raw is not None:
+
+        try:
+            min_avg = float(min_avg_raw)
+
+        except ValueError:
+
+            return (
+                {
+                    "error": "Dữ liệu không hợp lệ",
+                    "detail": "min_avg phải là một số."
+                },
+                400
+            )
+
+    result = []
+
+    for mssv, student in STUDENTS.items():
+
+        summary = student_summary(mssv)
+
+        if lop_filter:
+
+            if student["lop"].lower() != lop_filter.lower():
+                continue
+
+        if min_avg is not None:
+
+            if summary["average"] is None:
+                continue
+
+            if summary["average"] < min_avg:
+                continue
+
+        result.append(summary)
+
+    response = make_response(
+        json.dumps(
+            result,
+            ensure_ascii=False
+        )
+    )
+
+    response.headers["Content-Type"] = (
+        "application/json; charset=utf-8"
+    )
+
+    return response
+
+
+# ============================================================
+# API CHI TIẾT SINH VIÊN
+# ============================================================
+
+@app.route("/api/students/<mssv>")
+def api_student_detail(mssv):
+
+    if mssv not in STUDENTS:
+
+        abort(
+            404,
+            description=f"Không có sinh viên với MSSV = {mssv}."
+        )
+
+    response = make_response(
+        json.dumps(
+            student_summary(mssv),
+            ensure_ascii=False
+        )
+    )
+
+    response.headers["Content-Type"] = (
+        "application/json; charset=utf-8"
+    )
+
+    return response
+
+
 
 # ============================================================
 # CHẠY ỨNG DỤNG
