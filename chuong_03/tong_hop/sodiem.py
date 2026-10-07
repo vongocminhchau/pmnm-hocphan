@@ -741,6 +741,167 @@ def api_student_detail(mssv):
     return response
 
 
+# ============================================================
+# PHẦN 2 - CÂU 8
+# QUẢN LÝ ĐIỂM MỘT HỌC PHẦN
+# ============================================================
+
+@app.route(
+    "/api/students/<mssv>/scores/<course>",
+    methods=["GET", "PUT", "DELETE"]
+)
+def manage_score(mssv, course):
+
+    # MSSV không tồn tại -> 404
+    if mssv not in STUDENTS:
+
+        abort(
+            404,
+            description=f"Không có sinh viên với MSSV = {mssv}."
+        )
+
+    course = course.upper()
+
+    scores = STUDENTS[mssv]["scores"]
+
+    # --------------------------------------------------------
+    # GET
+    # --------------------------------------------------------
+
+    if request.method == "GET":
+
+        if course not in scores:
+
+            abort(
+                404,
+                description=(
+                    f"Sinh viên {mssv} chưa có điểm "
+                    f"học phần {course}."
+                )
+            )
+
+        data = {
+            "mssv": mssv,
+            "course": course,
+            "score": scores[course]
+        }
+
+        response = make_response(
+            json.dumps(
+                data,
+                ensure_ascii=False
+            )
+        )
+
+        response.headers["Content-Type"] = (
+            "application/json; charset=utf-8"
+        )
+
+        return response
+
+    # --------------------------------------------------------
+    # PUT
+    # --------------------------------------------------------
+
+    if request.method == "PUT":
+
+        score_raw = request.args.get("score")
+
+        if score_raw is None:
+
+            return (
+                {
+                    "error": "Dữ liệu không hợp lệ",
+                    "detail": "Thiếu tham số score."
+                },
+                400
+            )
+
+        try:
+            score = float(score_raw)
+
+        except ValueError:
+
+            return (
+                {
+                    "error": "Dữ liệu không hợp lệ",
+                    "detail": "score phải là một số."
+                },
+                400
+            )
+
+        if score < 0 or score > 10:
+
+            return (
+                {
+                    "error": "Dữ liệu không hợp lệ",
+                    "detail": "score phải nằm trong khoảng từ 0 đến 10."
+                },
+                400
+            )
+
+        existed = course in scores
+
+        scores[course] = score
+
+        data = {
+            "mssv": mssv,
+            "course": course,
+            "score": score,
+            "average": average(scores)
+        }
+
+        response = make_response(
+            json.dumps(
+                data,
+                ensure_ascii=False
+            )
+        )
+
+        response.headers["Content-Type"] = (
+            "application/json; charset=utf-8"
+        )
+
+        response.headers["Location"] = url_for(
+            "manage_score",
+            mssv=mssv,
+            course=course
+        )
+
+        if existed:
+
+            response.status_code = 200
+
+        else:
+
+            response.status_code = 201
+
+        return response
+
+    # --------------------------------------------------------
+    # DELETE
+    # --------------------------------------------------------
+
+    if request.method == "DELETE":
+
+        if course not in scores:
+
+            abort(
+                404,
+                description=(
+                    f"Sinh viên {mssv} chưa có điểm "
+                    f"học phần {course}."
+                )
+            )
+
+        del scores[course]
+
+        response = make_response("")
+
+        response.status_code = 204
+
+        return response
+
 
 # ============================================================
 # CHẠY ỨNG DỤNG
