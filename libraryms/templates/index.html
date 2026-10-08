@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}
+Trang chủ - LibraryMS
+{% endblock %}
+
+{% block content %}
+
+<h1>LibraryMS v0.1</h1>
+
+<p>
+    Hệ thống quản lý thư viện được xây dựng bằng Flask.
+</p>
+
+<div class="cards">
+
+    <div class="card">
+        <div class="number">
+            {{ total_books }}
+        </div>
+
+        <p>Tổng số đầu sách</p>
+    </div>
+
+    <div class="card">
+        <div class="number">
+            {{ available_books }}
+        </div>
+
+        <p>Sách sẵn sàng cho mượn</p>
+    </div>
+
+</div>
+
+{% endblock %}
