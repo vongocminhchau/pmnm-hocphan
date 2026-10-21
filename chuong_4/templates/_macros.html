@@ -1,0 +1,60 @@
+{% macro item_card(item, number) %}
+<tr>
+    <td class="text-center">
+        <span class="item-number">{{ number }}</span>
+    </td>
+    <td>
+        <div class="d-flex align-items-center gap-3">
+            <span class="item-icon" aria-hidden="true">
+                <i class="bi bi-cup-hot"></i>
+            </span>
+            <div>
+                <div class="fw-semibold">{{ item.name|title }}</div>
+                <small class="text-secondary">Món uống Sông Hương</small>
+            </div>
+        </div>
+    </td>
+    <td class="price">{{ item.price|vnd }}</td>
+    <td class="text-center">
+        {% if item.available %}
+            <span class="badge rounded-pill text-bg-success px-3 py-2">
+                <i class="bi bi-check-circle me-1"></i>Còn hàng
+            </span>
+        {% else %}
+            <span class="badge rounded-pill text-bg-danger px-3 py-2">
+                <i class="bi bi-x-circle me-1"></i>Hết hàng
+            </span>
+        {% endif %}
+    </td>
+</tr>
+{% endmacro %}
+
+{% macro pagination(page, pages, endpoint) %}
+{% if pages > 1 %}
+<nav class="mt-4" aria-label="Phân trang thực đơn">
+    <ul class="pagination justify-content-center">
+        {% if page > 1 %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for(endpoint, page=page - 1) }}" rel="prev">« Trước</a>
+            </li>
+        {% endif %}
+
+        {% for page_number in range(1, pages + 1) %}
+            <li class="page-item{% if page_number == page %} active{% endif %}">
+                {% if page_number == page %}
+                    <strong class="page-link" aria-current="page">{{ page_number }}</strong>
+                {% else %}
+                    <a class="page-link" href="{{ url_for(endpoint, page=page_number) }}">{{ page_number }}</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+
+        {% if page < pages %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for(endpoint, page=page + 1) }}" rel="next">Sau »</a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endmacro %}

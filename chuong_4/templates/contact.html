@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Liên hệ - {{ shop.short_name }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Liên hệ</h1>
+    <p><strong>Điện thoại:</strong> {{ shop.phone }}</p>
+    <p><strong>Địa chỉ:</strong> {{ shop.address }}</p>
+</div>
+{% endblock %}
