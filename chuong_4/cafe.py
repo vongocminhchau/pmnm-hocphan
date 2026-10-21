@@ -2,17 +2,10 @@
 from datetime import datetime
 from flask import Flask, render_template, request
 
-from app import menu_blueprint
+from app import SHOP, menu_blueprint
 
 app = Flask(__name__)
 app.register_blueprint(menu_blueprint)
-
-SHOP = {
-    "name": "Cà phê Sông Hương",
-    "address": "12 Lê Lợi, Huế",
-    "open": 7,
-    "close": 22
-}
 
 PROMOTIONS = [
     "Giảm 10% cho sinh viên",
@@ -31,11 +24,20 @@ def index():
 
     return render_template(
         "index.html",
-        shop=SHOP,
         hour=hour,
         is_open=is_open,
         promotions=PROMOTIONS
     )
+
+
+@app.get("/contact")
+def contact():
+    return render_template("contact.html")
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template("404.html"), 404
 
 
 if __name__ == "__main__":
