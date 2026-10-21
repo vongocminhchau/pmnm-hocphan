@@ -2,7 +2,10 @@
 from datetime import datetime
 from flask import Flask, render_template, request
 
+from app import menu_blueprint
+
 app = Flask(__name__)
+app.register_blueprint(menu_blueprint)
 
 SHOP = {
     "name": "Cà phê Sông Hương",
