@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}
+Chi tiết sách - LibraryMS
+{% endblock %}
+
+{% block content %}
+
+<h1>Chi tiết sách</h1>
+
+<table>
+
+    <tr>
+        <th>ID</th>
+        <td>{{ book.id }}</td>
+    </tr>
+
+    <tr>
+        <th>Tên sách</th>
+        <td>{{ book.title }}</td>
+    </tr>
+
+    <tr>
+        <th>Tác giả</th>
+        <td>{{ book.author }}</td>
+    </tr>
+
+    <tr>
+        <th>Năm xuất bản</th>
+        <td>{{ book.year }}</td>
+    </tr>
+
+    <tr>
+        <th>Thể loại</th>
+        <td>{{ book.category }}</td>
+    </tr>
+
+    <tr>
+        <th>Trạng thái</th>
+
+        <td>
+            {% if book.available %}
+                <span class="available">
+                    Có thể mượn
+                </span>
+            {% else %}
+                <span class="unavailable">
+                    Đã được mượn
+                </span>
+            {% endif %}
+        </td>
+
+    </tr>
+
+</table>
+
+<br>
+
+<a href="{{ url_for('books') }}">
+    ← Quay lại danh sách sách
+</a>
+
+{% endblock %}
