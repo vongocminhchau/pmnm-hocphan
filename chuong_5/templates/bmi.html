@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tính chỉ số BMI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body { min-height: 100vh; background: radial-gradient(circle at top left, #dcfce7 0, transparent 38%), linear-gradient(135deg, #f8fafc, #eff6ff); }
+        .navbar { background: rgba(20, 54, 91, .96); }
+        .bmi-card { max-width: 760px; border: 0; border-radius: 1rem; }
+        .bmi-icon { width: 70px; height: 70px; }
+        .error { min-height: 21px; font-size: .875rem; }
+        .result-box { border-left: 5px solid #198754; }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-dark navbar-expand-lg shadow-sm sticky-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="/"><i class="bi bi-calculator-fill me-2"></i>Bài tập Flask</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#exerciseNav"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="exerciseNav">
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/"><i class="bi bi-calculator me-1"></i>Máy tính</a>
+                <a class="nav-link" href="/grades"><i class="bi bi-mortarboard-fill me-1"></i>Tính điểm học phần</a>
+                <a class="nav-link active" href="/bmi"><i class="bi bi-heart-pulse-fill me-1"></i>Tính BMI</a>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="container py-4 py-md-5">
+    <div class="card bmi-card mx-auto shadow-lg">
+        <div class="card-body p-4 p-md-5">
+            <div class="text-center mb-4">
+                <div class="bmi-icon rounded-circle bg-danger-subtle text-danger d-inline-flex align-items-center justify-content-center fs-2 mb-3"><i class="bi bi-heart-pulse-fill"></i></div>
+                <h1 class="h3 fw-bold mb-1">Tính chỉ số BMI</h1>
+                <p class="text-secondary mb-0">Chỉ số khối cơ thể của bạn</p>
+            </div>
+
+            <form method="post" action="/bmi" novalidate>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold" for="height"><i class="bi bi-rulers me-1"></i>Chiều cao</label>
+                        <div class="input-group">
+                            <input class="form-control {% if errors.height %}is-invalid{% endif %}" id="height" name="height" type="text" inputmode="decimal" value="{{ values.height }}" placeholder="170">
+                            <span class="input-group-text">cm</span>
+                        </div>
+                        <div class="error text-danger mt-1">{% if errors.height %}{{ errors.height }}{% endif %}</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold" for="weight"><i class="bi bi-speedometer2 me-1"></i>Cân nặng</label>
+                        <div class="input-group">
+                            <input class="form-control {% if errors.weight %}is-invalid{% endif %}" id="weight" name="weight" type="text" inputmode="decimal" value="{{ values.weight }}" placeholder="65">
+                            <span class="input-group-text">kg</span>
+                        </div>
+                        <div class="error text-danger mt-1">{% if errors.weight %}{{ errors.weight }}{% endif %}</div>
+                    </div>
+                </div>
+                <button class="btn btn-danger btn-lg w-100" type="submit"><i class="bi bi-calculator-fill me-2"></i>Tính BMI</button>
+            </form>
+
+            {% if bmi is not none %}
+            <div class="alert alert-{{ color }} result-box d-flex align-items-center mt-4 mb-0" role="alert">
+                <i class="bi bi-person-check-fill fs-3 me-3"></i>
+                <div><small>Chỉ số BMI của bạn</small><div class="fs-3 fw-bold">{{ bmi|round(1) }} - {{ category }}</div></div>
+            </div>
+            {% endif %}
+
+            <hr class="my-4">
+            <div class="row text-center g-2 small">
+                <div class="col-6 col-md-3"><span class="badge text-bg-info w-100 p-2">Thiếu cân</span><div>&lt; 18,5</div></div>
+                <div class="col-6 col-md-3"><span class="badge text-bg-success w-100 p-2">Bình thường</span><div>18,5 - 24,9</div></div>
+                <div class="col-6 col-md-3"><span class="badge text-bg-warning w-100 p-2">Thừa cân</span><div>25 - 29,9</div></div>
+                <div class="col-6 col-md-3"><span class="badge text-bg-danger w-100 p-2">Béo phì</span><div>≥ 30</div></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
