@@ -41,17 +41,17 @@
                 <div class="row g-3">
                     <div class="col-md-4">
                         <label class="form-label fw-semibold" for="cc">Chuyên cần <span class="badge text-bg-primary weight-badge">10%</span></label>
-                        <input class="form-control {% if errors.cc %}is-invalid{% endif %}" id="cc" name="cc" type="text" inputmode="decimal" value="{{ values.cc }}" placeholder="0 - 10">
+                        <input class="form-control {% if errors.cc %}is-invalid{% endif %}" id="cc" name="cc" type="number" step="any" min="0" max="10" inputmode="decimal" value="{{ values.cc }}" placeholder="0 - 10" required>
                         <div class="error text-danger mt-1">{% if errors.cc %}{{ errors.cc }}{% endif %}</div>
                     </div>
                     <div class="col-md-4">
                         <label class="form-label fw-semibold" for="gk">Giữa kỳ <span class="badge text-bg-warning weight-badge">30%</span></label>
-                        <input class="form-control {% if errors.gk %}is-invalid{% endif %}" id="gk" name="gk" type="text" inputmode="decimal" value="{{ values.gk }}" placeholder="0 - 10">
+                        <input class="form-control {% if errors.gk %}is-invalid{% endif %}" id="gk" name="gk" type="number" step="any" min="0" max="10" inputmode="decimal" value="{{ values.gk }}" placeholder="0 - 10" required>
                         <div class="error text-danger mt-1">{% if errors.gk %}{{ errors.gk }}{% endif %}</div>
                     </div>
                     <div class="col-md-4">
                         <label class="form-label fw-semibold" for="ck">Cuối kỳ <span class="badge text-bg-danger weight-badge">60%</span></label>
-                        <input class="form-control {% if errors.ck %}is-invalid{% endif %}" id="ck" name="ck" type="text" inputmode="decimal" value="{{ values.ck }}" placeholder="0 - 10">
+                        <input class="form-control {% if errors.ck %}is-invalid{% endif %}" id="ck" name="ck" type="number" step="any" min="0" max="10" inputmode="decimal" value="{{ values.ck }}" placeholder="0 - 10" required>
                         <div class="error text-danger mt-1">{% if errors.ck %}{{ errors.ck }}{% endif %}</div>
                     </div>
                 </div>

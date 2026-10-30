@@ -43,7 +43,7 @@
                     <div class="col-md-6">
                         <label class="form-label fw-semibold" for="height"><i class="bi bi-rulers me-1"></i>Chiều cao</label>
                         <div class="input-group">
-                            <input class="form-control {% if errors.height %}is-invalid{% endif %}" id="height" name="height" type="text" inputmode="decimal" value="{{ values.height }}" placeholder="170">
+                            <input class="form-control {% if errors.height %}is-invalid{% endif %}" id="height" name="height" type="number" step="any" min="50" max="250" inputmode="decimal" value="{{ values.height }}" placeholder="170" required>
                             <span class="input-group-text">cm</span>
                         </div>
                         <div class="error text-danger mt-1">{% if errors.height %}{{ errors.height }}{% endif %}</div>
@@ -51,7 +51,7 @@
                     <div class="col-md-6">
                         <label class="form-label fw-semibold" for="weight"><i class="bi bi-speedometer2 me-1"></i>Cân nặng</label>
                         <div class="input-group">
-                            <input class="form-control {% if errors.weight %}is-invalid{% endif %}" id="weight" name="weight" type="text" inputmode="decimal" value="{{ values.weight }}" placeholder="65">
+                            <input class="form-control {% if errors.weight %}is-invalid{% endif %}" id="weight" name="weight" type="number" step="any" min="10" max="300" inputmode="decimal" value="{{ values.weight }}" placeholder="65" required>
                             <span class="input-group-text">kg</span>
                         </div>
                         <div class="error text-danger mt-1">{% if errors.weight %}{{ errors.weight }}{% endif %}</div>
