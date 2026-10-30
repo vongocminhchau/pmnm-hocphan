@@ -3,17 +3,6 @@ from flask import Flask, render_template, request
 app = Flask(__name__)
 
 
-def parse_number(val):
-    """Hàm bổ trợ thay dấu phẩy thập phân và ép kiểu float."""
-    if not val:
-        return None, "Vui lòng nhập một số."
-
-    try:
-        return float(val.strip().replace(',', '.')), None
-    except ValueError:
-        return None, "Vui lòng nhập một số."
-
-
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/calculator', methods=['GET', 'POST'])
 def calculator():
@@ -22,12 +11,22 @@ def calculator():
     result = None
 
     if request.method == 'POST':
-        values['a'] = request.form.get('a', '')
-        values['b'] = request.form.get('b', '')
+        values['a'] = request.form.get('a', '').strip()
+        values['b'] = request.form.get('b', '').strip()
         values['op'] = request.form.get('op', '+')
 
-        num_a, errors['a'] = parse_number(values['a'])
-        num_b, errors['b'] = parse_number(values['b'])
+        try:
+            num_a = float(values['a'].replace(',', '.'))
+        except ValueError:
+            errors['a'] = "Vui lòng nhập một số."
+            num_a = None
+
+        try:
+            num_b = float(values['b'].replace(',', '.'))
+        except ValueError:
+            errors['b'] = "Vui lòng nhập một số."
+            num_b = None
+
         op = values['op']
 
         valid_ops = ['+', '-', '*', '/']
@@ -62,8 +61,8 @@ def bmi_calculator():
     color = None
 
     if request.method == 'POST':
-        values['height'] = request.form.get('height', '').strip().replace(',', '.')
-        values['weight'] = request.form.get('weight', '').strip().replace(',', '.')
+        values['height'] = request.form.get('height', '').strip()
+        values['weight'] = request.form.get('weight', '').strip()
 
         for field, value, minimum, maximum, label in (
             ('height', values['height'], 50, 250, 'chiều cao'),
@@ -74,15 +73,15 @@ def bmi_calculator():
                 continue
 
             try:
-                number = float(value)
+                number = float(value.replace(',', '.'))
                 if number < minimum or number > maximum:
                     errors[field] = f"Giá trị phải từ {minimum} đến {maximum}."
             except ValueError:
                 errors[field] = "Vui lòng nhập một số."
 
         if not any(errors.values()):
-            height_m = float(values['height']) / 100
-            weight = float(values['weight'])
+            height_m = float(values['height'].replace(',', '.')) / 100
+            weight = float(values['weight'].replace(',', '.'))
             bmi = weight / (height_m * height_m)
 
             if bmi < 18.5:
@@ -113,23 +112,23 @@ def grade_calculator():
 
     if request.method == 'POST':
         for field in values:
-            values[field] = request.form.get(field, '').strip().replace(',', '.')
+            values[field] = request.form.get(field, '').strip()
 
             if not values[field]:
                 errors[field] = 'Vui lòng nhập một số.'
                 continue
 
             try:
-                score = float(values[field])
+                score = float(values[field].replace(',', '.'))
                 if score < 0 or score > 10:
                     errors[field] = 'Điểm phải từ 0 đến 10.'
             except ValueError:
                 errors[field] = 'Vui lòng nhập một số.'
 
         if not any(errors.values()):
-            cc = float(values['cc'])
-            gk = float(values['gk'])
-            ck = float(values['ck'])
+            cc = float(values['cc'].replace(',', '.'))
+            gk = float(values['gk'].replace(',', '.'))
+            ck = float(values['ck'].replace(',', '.'))
             result = cc * 0.10 + gk * 0.30 + ck * 0.60
 
             if result >= 8.5:

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -37,27 +37,27 @@
             <h1 class="h3 fw-bold mb-1">Máy tính cơ bản</h1>
             <p class="text-secondary mb-0">Nhập hai số và chọn phép tính</p>
         </div>
-        <form method="post" action="/">
+        <form method="post">
             <div class="row g-3 align-items-start">
                 <div class="col-md-4">
                     <label for="a" class="form-label fw-semibold">Số thứ nhất</label>
-                    <input class="form-control {% if errors.a %}is-invalid{% endif %}" id="a" type="text" name="a" inputmode="decimal" value="{{ values.a }}" placeholder="Ví dụ: 7" required>
+                    <input class="form-control {% if errors.a %}is-invalid{% endif %}" id="a" name="a" value="{{ values.a }}">
                     <div class="error text-danger mt-1">{% if errors.a %}{{ errors.a }}{% endif %}</div>
                 </div>
                 <div class="col-md-4">
                     <label for="op" class="form-label fw-semibold">Phép toán</label>
                     <select class="form-select {% if errors.op %}is-invalid{% endif %}" id="op" name="op">
-                        <option value="+" {% if values.op == '+' %}selected{% endif %}>+ &nbsp; Cộng</option>
-                        <option value="-" {% if values.op == '-' %}selected{% endif %}>− &nbsp; Trừ</option>
-                        <option value="*" {% if values.op == '*' %}selected{% endif %}>× &nbsp; Nhân</option>
-                        <option value="/" {% if values.op == '/' %}selected{% endif %}>÷ &nbsp; Chia</option>
+                        <option value="+" {% if values.op == '+' %}selected{% endif %}>+</option>
+                        <option value="-" {% if values.op == '-' %}selected{% endif %}>-</option>
+                        <option value="*" {% if values.op == '*' %}selected{% endif %}>*</option>
+                        <option value="/" {% if values.op == '/' %}selected{% endif %}>/</option>
                         {% if values.op not in ['+', '-', '*', '/'] %}<option value="{{ values.op }}" selected>{{ values.op }}</option>{% endif %}
                     </select>
                     <div class="error text-danger mt-1">{% if errors.op %}{{ errors.op }}{% endif %}</div>
                 </div>
                 <div class="col-md-4">
                     <label for="b" class="form-label fw-semibold">Số thứ hai</label>
-                    <input class="form-control {% if errors.b %}is-invalid{% endif %}" id="b" type="text" name="b" inputmode="decimal" value="{{ values.b }}" placeholder="Ví dụ: 2" required>
+                    <input class="form-control {% if errors.b %}is-invalid{% endif %}" id="b" name="b" value="{{ values.b }}">
                     <div class="error text-danger mt-1">{% if errors.b %}{{ errors.b }}{% endif %}</div>
                 </div>
             </div>
@@ -74,4 +74,3 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
