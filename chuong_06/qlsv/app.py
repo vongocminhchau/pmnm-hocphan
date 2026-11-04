@@ -113,3 +113,15 @@ def try_queries():
     
     # Trả về kết quả dưới dạng văn bản thuần (text/plain)
     return "\n".join(lines), {"Content-Type": "text/plain; charset=utf-8"}
+from flask import Flask, render_template
+
+# ... (các phần cấu hình và khai báo Model Student đã có trước đó)
+@app.get("/danh-sach-sv")
+def render_student_table():
+    # 1. Truy vấn lấy tất cả sinh viên từ cơ sở dữ liệu
+    students = db.session.execute(
+        db.select(Student)
+    ).scalars().all()
+    
+    # 2. Render ra file HTML và truyền dữ liệu sang
+    return render_template("students.html", students=students)
