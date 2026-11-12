@@ -1,0 +1,144 @@
+
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block page_header %}
+<div class="mb-4">
+    <h2 class="mb-1">Dashboard</h2>
+    <p class="text-muted mb-0">
+        Tổng quan tình hình quản lý thư viện
+    </p>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<!-- STATISTICS -->
+<div class="row g-3 mb-4">
+
+    <div class="col-md-6 col-xl-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p class="text-muted mb-1">Tổng đầu sách</p>
+                        <h3 class="fw-bold mb-0">{{ total_books }}</h3>
+                    </div>
+                    <i class="bi bi-book fs-2 text-primary"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p class="text-muted mb-1">Tổng số bản sách</p>
+                        <h3 class="fw-bold mb-0">{{ total_quantity }}</h3>
+                    </div>
+                    <i class="bi bi-collection fs-2 text-success"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p class="text-muted mb-1">Danh mục</p>
+                        <h3 class="fw-bold mb-0">{{ total_categories }}</h3>
+                    </div>
+                    <i class="bi bi-tags fs-2 text-info"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p class="text-muted mb-1">Sách sắp hết</p>
+                        <h3 class="fw-bold mb-0">{{ low_stock_books }}</h3>
+                    </div>
+                    <i class="bi bi-exclamation-triangle fs-2 text-warning"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- RECENT BOOKS -->
+<div class="card border-0 shadow-sm">
+
+    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Sách mới thêm gần đây</h5>
+
+        <a href="{{ url_for('book_index') }}"
+           class="btn btn-sm btn-outline-primary">
+            Xem tất cả
+        </a>
+    </div>
+
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tên sách</th>
+                        <th>Tác giả</th>
+                        <th>Danh mục</th>
+                        <th>Số lượng</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for book in recent_books %}
+                    <tr>
+                        <td>{{ book.id }}</td>
+                        <td class="fw-semibold">{{ book.title }}</td>
+                        <td>{{ book.author }}</td>
+                        <td>{{ book.category.name }}</td>
+                        <td>
+                            {% if book.quantity <= 0 %}
+                            <span class="badge bg-danger">Hết hàng</span>
+                            {% elif book.quantity <= 5 %}
+                            <span class="badge bg-warning text-dark">
+                                Sắp hết ({{ book.quantity }})
+                            </span>
+                            {% else %}
+                            <span class="badge bg-success">
+                                Còn hàng ({{ book.quantity }})
+                            </span>
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center text-muted py-4">
+                            Chưa có dữ liệu sách.
+                            <a href="{{ url_for('book_create') }}">
+                                Thêm sách ngay
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

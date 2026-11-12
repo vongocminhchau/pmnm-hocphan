@@ -1,0 +1,97 @@
+
+{% extends "base.html" %}
+
+{% block title %}Quản lý sách{% endblock %}
+
+{% block page_header %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="mb-1">Quản lý sách</h2>
+        <p class="text-muted mb-0">Danh sách sách trong thư viện</p>
+    </div>
+    <a href="{{ url_for('book_create') }}" class="btn btn-primary">
+        <i class="bi bi-plus-lg me-1"></i> Thêm sách
+    </a>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tên sách</th>
+                        <th>Tác giả</th>
+                        <th>Năm xuất bản</th>
+                        <th>Số lượng</th>
+                        <th>Danh mục</th>
+                        <th class="text-end">Thao tác</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for book in books %}
+                    <tr>
+                        <td>{{ book.id }}</td>
+                        <td class="fw-semibold">{{ book.title }}</td>
+                        <td>{{ book.author }}</td>
+                        <td>{{ book.publish_year or "—" }}</td>
+                        <td>
+                            {% if book.quantity <= 0 %}
+                            <span class="badge bg-danger">Hết hàng</span>
+                            {% elif book.quantity <= 5 %}
+                            <span class="badge bg-warning text-dark">
+                                Sắp hết ({{ book.quantity }})
+                            </span>
+                            {% else %}
+                            <span class="badge bg-success">
+                                Còn hàng ({{ book.quantity }})
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="badge bg-info text-dark">
+                                {{ book.category.name }}
+                            </span>
+                        </td>
+                        <td class="text-end">
+                            <a
+                                href="{{ url_for('book_edit', book_id=book.id) }}"
+                                class="btn btn-sm btn-outline-primary"
+                                title="Sửa"
+                            >
+                                <i class="bi bi-pencil"></i>
+                            </a>
+
+                            <form
+                                action="{{ url_for('book_delete', book_id=book.id) }}"
+                                method="POST"
+                                class="d-inline"
+                                onsubmit="return confirm('Bạn có chắc muốn xóa sách này?');"
+                            >
+                                <button
+                                    type="submit"
+                                    class="btn btn-sm btn-outline-danger"
+                                    title="Xóa"
+                                >
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-4">
+                            Chưa có sách nào trong hệ thống.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

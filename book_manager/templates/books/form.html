@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}{% if is_edit %}Chỉnh sửa sách{% else %}Thêm sách{% endif %}{% endblock %}
+
+{% block page_header %}
+<h2 class="mb-1">{% if is_edit %}Chỉnh sửa sách{% else %}Thêm sách mới{% endif %}</h2>
+<p class="text-muted">{% if is_edit %}Cập nhật thông tin sách{% else %}Nhập thông tin sách{% endif %}</p>
+{% endblock %}
+
+{% block content %}
+{% if is_edit %}
+    {% set title_value = book.title %}
+    {% set author_value = book.author %}
+    {% set year_value = book.publish_year or '' %}
+    {% set quantity_value = book.quantity %}
+    {% set selected_category_id = book.category_id|string %}
+{% else %}
+    {% set title_value = '' %}
+    {% set author_value = '' %}
+    {% set year_value = '' %}
+    {% set quantity_value = '0' %}
+    {% set selected_category_id = '' %}
+{% endif %}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <form method="POST">
+            <div class="mb-3">
+                <label for="title" class="form-label">Tên sách</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="title"
+                    name="title"
+                    maxlength="200"
+                    value="{{ request.form.get('title', title_value) }}"
+                    required
+                >
+            </div>
+
+            <div class="mb-3">
+                <label for="author" class="form-label">Tác giả</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="author"
+                    name="author"
+                    maxlength="100"
+                    value="{{ request.form.get('author', author_value) }}"
+                    required
+                >
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="publish_year" class="form-label">Năm xuất bản</label>
+                    <input
+                        type="number"
+                        class="form-control"
+                        id="publish_year"
+                        name="publish_year"
+                        min="1"
+                        value="{{ request.form.get('publish_year', year_value) }}"
+                    >
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="quantity" class="form-label">Số lượng</label>
+                    <input
+                        type="number"
+                        class="form-control"
+                        id="quantity"
+                        name="quantity"
+                        min="0"
+                        value="{{ request.form.get('quantity', quantity_value) }}"
+                        required
+                    >
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label for="category_id" class="form-label">Danh mục</label>
+                <select
+                    class="form-select"
+                    id="category_id"
+                    name="category_id"
+                    required
+                >
+                    <option value="">-- Chọn danh mục --</option>
+                    {% for category in categories %}
+                    <option
+                        value="{{ category.id }}"
+                        {% if request.form.get('category_id', selected_category_id) == category.id|string %}selected{% endif %}
+                    >
+                        {{ category.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-check-lg me-1"></i>
+                {% if is_edit %}Cập nhật{% else %}Lưu sách{% endif %}
+            </button>
+
+            <a href="{{ url_for('book_index') }}" class="btn btn-secondary">
+                Quay lại
+            </a>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}{% if is_edit %}Sửa danh mục{% else %}Thêm danh mục{% endif %}{% endblock %}
+
+{% block page_header %}
+<h2>{% if is_edit %}Chỉnh sửa danh mục{% else %}Thêm danh mục{% endif %}</h2>
+{% if is_edit %}
+<p class="text-muted mb-0">Đang chỉnh sửa: {{ category.name }}</p>
+{% else %}
+<p class="text-muted mb-0">Tạo một danh mục sách mới</p>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+{% if is_edit %}
+    {% set name_value = category.name %}
+    {% set description_value = category.description or '' %}
+{% else %}
+    {% set name_value = '' %}
+    {% set description_value = '' %}
+{% endif %}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+        <form method="POST">
+            <div class="mb-3">
+                <label for="name" class="form-label fw-semibold">
+                    Tên danh mục <span class="text-danger">*</span>
+                </label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="name"
+                    name="name"
+                    placeholder="Ví dụ: Lập trình"
+                    value="{{ request.form.get('name', name_value) }}"
+                    maxlength="100"
+                    required
+                >
+            </div>
+
+            <div class="mb-4">
+                <label for="description" class="form-label fw-semibold">Mô tả</label>
+                <textarea
+                    class="form-control"
+                    id="description"
+                    name="description"
+                    rows="4"
+                    placeholder="Nhập mô tả cho danh mục..."
+                >{{ request.form.get('description', description_value) }}</textarea>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check-lg me-1"></i>
+                    {% if is_edit %}Cập nhật{% else %}Lưu danh mục{% endif %}
+                </button>
+
+                <a
+                    href="{{ url_for('category_index') }}"
+                    class="btn btn-outline-secondary"
+                >
+                    Hủy
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
